@@ -20,7 +20,7 @@ struct NodoLista{
 typedef struct{
     struct NodoLista *Primeiro;
     struct NodoLista *Ultimo;
-} TLista; //TLista È sÛ o controlador de toda a cadeia de NodoListas que ser„o criados.
+} TLista; //TLista √© s√≥ o controlador de toda a cadeia de NodoListas que ser√£o criados.
 
 
 void Cria(TLista& Lista);
@@ -47,15 +47,20 @@ bool Vazia(TLista Lista){
 
 void InsereInicio(TLista& Lista, TInfo Item){
     Apontador p = (Apontador) malloc (sizeof(struct NodoLista));
+    Apontador aux;
     p->Item = Item;
     p->Anterior = NULL;
     p->Proximo = Lista.Primeiro->Proximo;
-
+    aux->Proximo = Lista.Primeiro->Proximo; // Serve para ficar com o mesmo endere√ßo do primeiro,
+                                            // por√©m √© para ficar um n√≥ a frente do primeiro.
+    Lista.Primeiro->Proximo = p;
+    
     if(p->Proximo == NULL)
         Lista.Ultimo = p;
-    else
-        Lista.Primeiro->Proximo->Anterior = p;
-    Lista.Primeiro->Proximo = p;
+    else // S√≥ √© para entrar nesse else se n√£o for o primeiro item da lista a ser inserido
+        //Lista.Primeiro->Proximo->Anterior = p; // Ao fazer isso vai pro n√≥ cabe√ßa.
+        aux->Proximo->Anterior = p; // Se j√° houver itens na lista ele vai para o segundo que esse
+                                    // recebe o endere√ßo do primeiro.
 }
 
 void InserePosicao(TLista& Lista, int pos, TInfo Item){
@@ -72,7 +77,7 @@ void InserePosicao(TLista& Lista, int pos, TInfo Item){
         }
 
         if((aux == NULL) || (pos<1)){
-            cerr << "PosiÁ„o n„o existe" <<  endl;
+            cerr << "Posi√ß√£o n√£o existe" <<  endl;
             getch();
         }
         else{
@@ -108,7 +113,7 @@ void InsereFinal(TLista& Lista, TInfo Item){
 void Imprime(TLista Lista){
     cout << "Itens na LISTA: " << endl;
     if(Vazia(Lista))
-        cout << "Lista est· vazia." << endl;
+        cout << "Lista est√° vazia." << endl;
     else{
         Apontador aux ;
         aux = Lista.Primeiro->Proximo;
@@ -122,9 +127,9 @@ void Imprime(TLista Lista){
 
 
 void ImprimeAnterior(TLista Lista){
-    cout << "Itens de tr·s pra frente: " << endl;
+    cout << "Itens de tr√°s pra frente: " << endl;
     if(Vazia(Lista))
-        cout << "A lista est· vazia." << endl;
+        cout << "A lista est√° vazia." << endl;
     else{
         Apontador aux = Lista.Ultimo;
         while(aux != NULL){
@@ -182,9 +187,9 @@ void PesquisaRemove(TLista& Lista, TInfo Item){
     }
 
     else{
-        if(Lista.Primeiro->Proximo->Item.chave == Item.chave) //verifica se È o primeiro da lista
+        if(Lista.Primeiro->Proximo->Item.chave == Item.chave) //verifica se √© o primeiro da lista
             RemoveInicio(Lista);
-        else if(Lista.Ultimo->Item.chave == Item.chave) //verifica se È o ultimo da lista
+        else if(Lista.Ultimo->Item.chave == Item.chave) //verifica se √© o ultimo da lista
             RemoveFinal(Lista);
         else{
             Apontador aux = Lista.Primeiro;
@@ -193,7 +198,7 @@ void PesquisaRemove(TLista& Lista, TInfo Item){
                 aux = aux->Proximo;
 
             if(aux->Proximo == NULL){
-                cout << "Item n„o encontrado" << endl;
+                cout << "Item n√£o encontrado" << endl;
             }
             else{
                 if(aux->Proximo == NULL)
